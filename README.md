@@ -1,42 +1,65 @@
-# sv
+# FotoApp
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A simple photo application built with Svelte 5 and TailwindCSS.
 
-## Creating a project
+The app provides a live camera preview, allows users to capture photos, switch cameras, remove photos, print or save images, and automatically adds a branding / logo overlay to the final image. Further, the app also has a responsive layout for desktop and tablets
 
-If you're seeing this, you've probably already done this step. Congrats!
+---
 
-```sh
-# create a new project
-npx sv create my-app
+## Technologies
+
+- Svelte 5
+- TypeScript
+- TailwindCSS
+- Browser MediaDevices API
+- HTML Canvas API
+
+---
+
+## Technical Requirements
+
+- Node.js 20.x
+- npm 10.x
+- Git
+
+---
+
+## Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/stjume/FotoApp.git
 ```
 
-To recreate this project with the same configuration:
+Install the packages
 
-```sh
-# recreate this project
-npx sv@0.15.3 create --template minimal --types ts --add tailwindcss="plugins:none" --install npm FotoApp
+```bash
+npm install
 ```
+
+---
 
 ## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+Once you've created a project and installed dependencies, start the local development server and open the app in a new browser tab:
 
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
+```bash
 npm run dev -- --open
 ```
 
+---
+
 ## Building
 
-To create a production version of your app:
+Create a production build:
 
-```sh
+```bash
 npm run build
 ```
 
-You can preview the production build with `npm run preview`.
+Preview the production build locally:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+```bash
+npm run preview
+```

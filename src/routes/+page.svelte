@@ -7,14 +7,20 @@
 	let facingMode = $state('user');
 
     async function startCamera() {
-        stream = await navigator.mediaDevices.getUserMedia({
-			audio: false,
-            video: {
-            facingMode: facingMode
-            }
-        });
+		try {
+			stream = await navigator.mediaDevices.getUserMedia({
+				audio: false,
+				video: {
+				facingMode: facingMode
+				}
+			});
 
-        videoRef.srcObject = stream;
+			videoRef.srcObject = stream;
+			console.log("Camera started.")
+		} catch (err) {
+			console.error("Could not start camera: ", err);
+		}
+
     }
 
 	function stopCamera() {
@@ -22,9 +28,19 @@
 	}
 
     function takePhoto() {
+		if (!videoRef || !canvasRef) {
+			console.warn("Video or canvas is not ready.");
+			return;
+		}
+
         const canvas = canvasRef;
         const video = videoRef;
         const context = canvas.getContext('2d');
+
+		if (!context) {
+			console.error("Could not get canvas context.");
+			return;
+		}
 
         canvas.width = video.videoWidth;
         canvas.height = video.videoHeight;
@@ -57,7 +73,10 @@
 	}
 
 	function savePhoto () {
-		if (!photoUrl) return
+		if (!photoUrl) {
+			console.warn("No photo available to save.");
+			return
+		}
 
 		const link = document.createElement('a');
 		link.href = photoUrl;
@@ -67,10 +86,9 @@
 
 	function printPhoto() {
 		if (!photoUrl) {
-			alert('Bitte zuerst ein Foto aufnehmen.');
+			console.warn("No photo available to print.");
 			return;
 		}
-
 		window.print();
 	}
 
@@ -133,7 +151,9 @@
 		</div>
 	</div>
 </div>
+
 <canvas bind:this={canvasRef} class="hidden"></canvas>
+
 	<!-- PRINT ONLY -->
 <div class="print-only">
 	{#if photoUrl}

@@ -52,7 +52,7 @@
 
 	function switchCamera() {
 		stopCamera();
-		facingMode === 'user' ? 'environment' : 'user';
+		facingMode = facingMode === 'user' ? 'environment' : 'user';
 		startCamera();
 	}
 
@@ -65,6 +65,15 @@
 		link.click();
 	}
 
+	function printPhoto() {
+		if (!photoUrl) {
+			alert('Bitte zuerst ein Foto aufnehmen.');
+			return;
+		}
+
+		window.print();
+	}
+
     onMount(() => {
 	startCamera();
     });
@@ -72,7 +81,7 @@
 
 
 
-<div class="min-h-screen bg-white p-4">
+<div class="min-h-screen bg-white p-4 print:hidden">
 	<div class="mx-auto w-full max-w-5xl">
 		<div class="overflow-hidden rounded-2xl bg-black shadow-lg">
 
@@ -118,12 +127,40 @@
 				Foto speichern
 			</button>
 
-			<button class="rounded-2xl bg-blue-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer">
+			<button class="rounded-2xl bg-blue-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={printPhoto}>
 				Foto Drucken
 			</button>
 		</div>
 	</div>
-
-	<canvas bind:this={canvasRef} class="hidden"></canvas>
 </div>
+<canvas bind:this={canvasRef} class="hidden"></canvas>
+	<!-- PRINT ONLY -->
+<div class="print-only">
+	{#if photoUrl}
+		<img src={photoUrl} alt="Print Photo" />
+	{/if}
+</div>
+
+<style>
+	.print-only {
+		display: none;
+	}
+
+	@media print {
+		.print-only {
+			display: flex;
+			width: 100vw;
+			height: 100vh;
+			align-items: center;
+			justify-content: center;
+			background: white;
+		}
+
+		.print-only img {
+			max-width: 100vw;
+			max-height: 100vh;
+			object-fit: contain;
+		}
+	}
+</style>
 

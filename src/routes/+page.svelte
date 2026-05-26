@@ -166,19 +166,29 @@
 		display: none;
 	}
 
+	@page {
+	size: A4 landscape;
+	margin: 0;
+	}
+
 	@media print {
+		body {
+			margin: 0;
+		}
+
 		.print-only {
-			display: flex;
-			width: 100vw;
-			height: 100vh;
+			display: block;
+			max-width: 95vw;
+			max-height: 95vh;
 			align-items: center;
 			justify-content: center;
 			background: white;
+			object-fit: contain;
 		}
 
 		.print-only img {
-			max-width: 100vw;
-			max-height: 100vh;
+			width: 95%;
+			height: auto;
 			object-fit: contain;
 		}
 	}

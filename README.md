@@ -2,7 +2,7 @@
 
 A simple photo application built with Svelte 5 and TailwindCSS.
 
-The app provides a live camera preview, allows users to capture photos, switch cameras, remove photos, print or save images, and automatically adds a branding / logo overlay to the final image. Further, the app also has a responsive layout for desktop and tablets
+The app provides a live camera preview, allows users to capture photos, switch cameras, remove photos, print or save photo, and automatically adds a branding / logo overlay to the final photo. Further, the app also has a responsive layout for desktop and tablets.
 
 ---
 

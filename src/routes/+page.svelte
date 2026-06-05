@@ -56,7 +56,7 @@
 		context.textBaseline = 'middle';
 		context.fillText('LOGO / TEXT', canvas.width / 2, canvas.height - barHeight / 2);
 
-        photoUrl = canvas.toDataURL('image/png');
+        photoUrl = canvas.toDataURL('image/jpeg', 0.95);
     }
 
     function removePhoto(){
@@ -80,7 +80,7 @@
 
 		const link = document.createElement('a');
 		link.href = photoUrl;
-		link.download = 'gruppenfoto.png';
+		link.download = 'gruppenfoto.jpg';
 		link.click();
 	}
 
@@ -90,6 +90,30 @@
 			return;
 		}
 		window.print();
+	}
+
+	async function sharePhoto() {
+		if (!photoUrl) {
+			console.warn("No photo available to share.");
+			return;
+		}
+
+		const response = await fetch(photoUrl);
+		const blob = await response.blob();
+
+		const file = new File([blob], "gruppenfoto.jpg", {
+			type: "image/jpeg"
+		});
+
+		if (navigator.canShare && navigator.canShare({ files: [file] })) {
+			await navigator.share({
+				files: [file],
+				title: "Gruppenfoto",
+				text: "Hier ist das Gruppenfoto."
+			});
+		} else {
+			console.warn("Sharing files is not supported on this device/browser.");
+		}
 	}
 
     onMount(() => {
@@ -141,7 +165,7 @@
 				Foto entfernen
 			</button>
 
-			<button class="rounded-2xl bg-yellow-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={savePhoto}>
+			<button class="rounded-2xl bg-yellow-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={sharePhoto}>
 				Foto speichern
 			</button>
 

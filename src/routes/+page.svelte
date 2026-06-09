@@ -232,20 +232,18 @@
 
 		.print-only {
 			display: flex;
-			max-width: 277mm;
-			max-height: 190mm;
+			max-width: 100vw;
+			max-height: 100vh;
 			align-items: center;
 			justify-content: center;
 			background: white;
 			overflow: hidden;
-			page-break-inside: avoid;
-			break-inside: avoid;
 		}
 
 		.print-only img {
 			display: block;
-			width: 100%;
-			height: 100%;
+			width: auto;
+			height: 84vh;
 			object-fit: contain;
 		}
 	}

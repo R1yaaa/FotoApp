@@ -5,6 +5,10 @@
     let photoUrl = $state<string | null>(null);
 	let stream = $state<MediaStream>();
 	let facingMode = $state('user');
+	let overlayText = $state('');
+	let layoutIndex = $state(0);
+	const layouts = ['bar-bottom', 'bar-top', 'no-bar'];
+	const currentLayout = layouts[layoutIndex];
 
     async function startCamera() {
 		try {
@@ -25,6 +29,11 @@
 
 	function stopCamera() {
 		stream?.getTracks().forEach((track) => track.stop());
+		stream = undefined;
+
+		if (videoRef) {
+			videoRef.srcObject = null;
+		}
 	}
 
     function takePhoto() {
@@ -54,9 +63,9 @@
 		context.font = `${canvas.width * 0.04}px Arial`;
 		context.textAlign = 'center';
 		context.textBaseline = 'middle';
-		context.fillText('LOGO / TEXT', canvas.width / 2, canvas.height - barHeight / 2);
+		context.fillText(overlayText, canvas.width / 2, canvas.height - barHeight / 2);
 
-        photoUrl = canvas.toDataURL('image/jpeg', 0.95);
+        photoUrl = canvas.toDataURL('image/jpeg');
     }
 
     function removePhoto(){
@@ -116,9 +125,11 @@
 		}
 	}
 
-    onMount(() => {
-	startCamera();
-    });
+	function changeLayout() {
+		layoutIndex = (layoutIndex + 1) % layouts.length;
+	}
+	
+    
 </script>
 
 
@@ -146,23 +157,39 @@
 				{/if}
 				<!-- BALKEN -->
 				<div class="absolute bottom-0 left-0 flex h-16 w-full items-center justify-center bg-yellow-100 text-black">
-					LOGO / TEXT
+					<input
+					type="text"
+					bind:value={overlayText}
+					placeholder="Text eingeben"
+					class="w-full bg-transparent text-center text-black outline-none"/>
 				</div>
 			</div>
 		</div>
 
 		<!-- BUTTONS -->
 		<div class="mt-3 flex justify-center gap-3 text-sm font-medium">
+			<button class="rounded-2xl bg-green-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={startCamera}>
+				Kamera starten
+			</button>
+
+			<button class="rounded-2xl bg-red-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={stopCamera}>
+				Kamera stoppen
+			</button> 
+
 			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={switchCamera}>
 				Kamera wechseln
 			</button>
 
-			<button class="rounded-2xl bg-green-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={takePhoto}>
+			<button class="rounded-2xl bg-lime-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={takePhoto}>
 				Foto aufnehmen
 			</button>
 
 			<button class="rounded-2xl bg-red-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={removePhoto}>
 				Foto entfernen
+			</button>
+
+			<button class="rounded-2xl bg-indigo-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={changeLayout}>
+				Layout wechseln
 			</button>
 
 			<button class="rounded-2xl bg-yellow-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={sharePhoto}>

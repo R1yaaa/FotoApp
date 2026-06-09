@@ -223,32 +223,32 @@
 	}
 
 	@media print {
+		html,
 		body {
 			margin: 0;
+			padding: 0;
+			overflow: hidden;
 		}
 
 		.print-only {
-			display: block;
-			max-width: 95vw;
-			max-height: 95vh;
+			display: flex;
+			max-width: 277mm;
+			max-height: 190mm;
 			align-items: center;
 			justify-content: center;
 			background: white;
-			object-fit: contain;
+			overflow: hidden;
+			page-break-inside: avoid;
+			break-inside: avoid;
 		}
 
 		.print-only img {
-			width: 92vw;
-			height: 92vh;
+			display: block;
+			width: 100%;
+			height: 100%;
 			object-fit: contain;
 		}
 	}
 
-	@media print and (orientation: landscape) {
-		.print-only img {
-			max-width: 90vw;
-			max-height: 90vh;
-		}
-	}
 </style>
 

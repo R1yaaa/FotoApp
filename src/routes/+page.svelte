@@ -243,7 +243,7 @@
 		.print-only img {
 			display: block;
 			width: auto;
-			height: 84vh;
+			height: 80vh;
 			object-fit: contain;
 		}
 	}

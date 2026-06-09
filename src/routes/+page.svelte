@@ -238,8 +238,8 @@
 		}
 
 		.print-only img {
-			width: 95%;
-			height: auto;
+			width: 92vw;
+			height: 92vh;
 			object-fit: contain;
 		}
 	}

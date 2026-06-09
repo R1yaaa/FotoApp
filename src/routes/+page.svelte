@@ -243,5 +243,12 @@
 			object-fit: contain;
 		}
 	}
+
+	@media print and (orientation: landscape) {
+		.print-only img {
+			max-width: 90vw;
+			max-height: 90vh;
+		}
+	}
 </style>
 

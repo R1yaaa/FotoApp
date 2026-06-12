@@ -1,14 +1,18 @@
 <script lang="ts">
     import { onMount } from 'svelte';
+    import { render } from 'svelte/server';
     let videoRef = $state<any>();
     let canvasRef = $state<any>();
-    let photoUrl = $state<string | null>(null);
+    let originalPhotoUrl = $state<string | null>(null);
+	let photoUrl = $state<string | null>(null);
 	let stream = $state<MediaStream>();
 	let facingMode = $state('user');
 	let overlayText = $state('');
 	let layoutIndex = $state(0);
 	const layouts = ['bar-bottom', 'bar-top', 'no-bar'];
 	const currentLayout = layouts[layoutIndex];
+	const logo = new Image();
+	logo.src = '/images/LogoGross.png';
 
     async function startCamera() {
 		try {
@@ -37,39 +41,74 @@
 	}
 
     function takePhoto() {
-		if (!videoRef || !canvasRef) {
-			console.warn("Video or canvas is not ready.");
-			return;
-		}
+		const canvas = canvasRef;
+		const video = videoRef;
+		const context = canvas.getContext('2d');
 
-        const canvas = canvasRef;
-        const video = videoRef;
-        const context = canvas.getContext('2d');
+		canvas.width = video.videoWidth;
+		canvas.height = video.videoHeight;
 
-		if (!context) {
-			console.error("Could not get canvas context.");
-			return;
-		}
+		context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+		originalPhotoUrl = canvas.toDataURL('image/jpeg', 0.95);
 
-        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+		renderFinalPhoto();
+	}
 
-		const barHeight = canvas.height * 0.15;
-		context.fillStyle = '#fef3c7';
-		context.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
-		context.fillStyle = 'black';
-		context.font = `${canvas.width * 0.04}px Arial`;
-		context.textAlign = 'center';
-		context.textBaseline = 'middle';
-		context.fillText(overlayText, canvas.width / 2, canvas.height - barHeight / 2);
+	function renderFinalPhoto() {
+		if (!originalPhotoUrl) return;
 
-        photoUrl = canvas.toDataURL('image/jpeg');
-    }
+		if (!logo.complete) {
+		logo.onload = renderFinalPhoto;
+		return;
+	}
+
+		const canvas = canvasRef;
+		const context = canvas.getContext('2d');
+
+		const image = new Image();
+
+		image.onload = () => {
+			canvas.width = image.width;
+			canvas.height = image.height;
+
+			context.drawImage(image, 0, 0);
+
+			const logoWidth = canvas.width * 0.3;
+			const logoHeight = logoWidth * (logo.height / logo.width);
+			const padding = canvas.width * 0.02;
+
+			context.imageSmoothingEnabled = true;
+			context.imageSmoothingQuality = 'high';
+
+			context.drawImage(
+				logo,
+				canvas.width - logoWidth - padding,
+				padding,
+				logoWidth,
+				logoHeight
+			);
+
+			const barHeight = canvas.height * 0.15;
+
+			context.fillStyle = '#fef3c7';
+			context.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
+
+			context.fillStyle = 'black';
+			context.font = `${canvas.width * 0.04}px Arial`;
+			context.textAlign = 'center';
+			context.textBaseline = 'middle';
+			context.fillText(overlayText, canvas.width / 2, canvas.height - barHeight / 2);
+
+			photoUrl = canvas.toDataURL('image/jpeg', 0.95);
+		};
+
+		image.src = originalPhotoUrl;
+	}
 
     function removePhoto(){
         photoUrl = null;
+		originalPhotoUrl = null;
         setTimeout(() => {
             startCamera();
         });
@@ -129,7 +168,7 @@
 		layoutIndex = (layoutIndex + 1) % layouts.length;
 	}
 	
-    
+    console.log(logo.width, logo.height);
 </script>
 
 
@@ -161,6 +200,7 @@
 					type="text"
 					bind:value={overlayText}
 					placeholder="Text eingeben"
+					oninput={renderFinalPhoto}
 					class="w-full bg-transparent text-center text-black outline-none"/>
 				</div>
 			</div>
@@ -193,7 +233,7 @@
 			</button>
 
 			<button class="rounded-2xl bg-yellow-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={sharePhoto}>
-				Foto speichern
+				Foto teilen
 			</button>
 
 			<button class="rounded-2xl bg-blue-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={printPhoto}>

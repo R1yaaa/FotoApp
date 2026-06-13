@@ -9,10 +9,23 @@
 	let facingMode = $state('user');
 	let overlayText = $state('');
 	let layoutIndex = $state(0);
-	const layouts = ['bar-bottom', 'bar-top', 'no-bar'];
-	const currentLayout = layouts[layoutIndex];
-	const logo = new Image();
-	logo.src = '/images/LogoGross.png';
+	const layouts = [
+		{
+			name: 'layout1', 
+			barColor: '#fef3c7', //yellow
+		},
+		{
+			name: 'layout2',
+			barColor: '#fecaca' //red
+		},
+		{
+			name: 'layout3',
+			barColor: '#bfdbfe' //blue
+		}
+	]
+	const currentLayout = () => layouts[layoutIndex];
+	let logo: HTMLImageElement;
+	
 
     async function startCamera() {
 		try {
@@ -91,7 +104,7 @@
 
 			const barHeight = canvas.height * 0.15;
 
-			context.fillStyle = '#fef3c7';
+			context.fillStyle = currentLayout().barColor;
 			context.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
 
 			context.fillStyle = 'black';
@@ -166,9 +179,17 @@
 
 	function changeLayout() {
 		layoutIndex = (layoutIndex + 1) % layouts.length;
+
+		if(originalPhotoUrl) {
+			renderFinalPhoto();
+		}
 	}
 	
-    console.log(logo.width, logo.height);
+    onMount(() => {
+		logo = new Image();
+		logo.src = '/images/LogoGross.png';
+
+	});
 </script>
 
 
@@ -195,7 +216,8 @@
 					></video>
 				{/if}
 				<!-- BALKEN -->
-				<div class="absolute bottom-0 left-0 flex h-16 w-full items-center justify-center bg-yellow-100 text-black">
+				<div class="absolute bottom-0 left-0 flex h-16 w-full items-center justify-center text-black"
+					style={`background-color: ${currentLayout().barColor}`}>
 					<input
 					type="text"
 					bind:value={overlayText}

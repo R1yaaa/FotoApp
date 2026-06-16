@@ -1,6 +1,8 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { render } from 'svelte/server';
+	import { base } from '$app/paths';
+
     let videoRef = $state<any>();
     let canvasRef = $state<any>();
     let originalPhotoUrl = $state<string | null>(null);
@@ -187,7 +189,7 @@
 	
     onMount(() => {
 		logo = new Image();
-		logo.src = '/images/LogoGross.png';
+		logo.src = `${base}/images/LogoGross.png`;
 
 	});
 </script>

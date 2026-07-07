@@ -14,19 +14,53 @@
 	const layouts = [
 		{
 			name: 'layout1', 
-			barColor: '#fef3c7', //yellow
+			footer: `${base}/images/gelb.jpg`,
+			textColor: 'black'
 		},
 		{
 			name: 'layout2',
-			barColor: '#fecaca' //red
+			footer: `${base}/images/gelb_text1.jpg`,
+			textColor: 'black'
 		},
 		{
 			name: 'layout3',
-			barColor: '#bfdbfe' //blue
+			footer: `${base}/images/gelb_text2.jpg`,
+			textColor: 'black'
+		},
+		{
+			name: 'layout4',
+			footer: `${base}/images/gruen.jpg`,
+			textColor: 'white'
+		},
+		{
+			name: 'layout5',
+			footer: `${base}/images/gruen_text1.jpg`,
+			textColor: 'white'
+		},
+		{
+			name: 'layout6',
+			footer: `${base}/images/gruen_text2.jpg`,
+			textColor: 'white'
+		},
+		{
+			name: 'layout7',
+			footer: `${base}/images/weltraum1.jpg`,
+			textColor: 'white'
+		},
+		{
+			name: 'layout8',
+			footer: `${base}/images/weltraum2.jpg`,
+			textColor: 'white'
+		},
+		{
+			name: 'layout9',
+			footer: `${base}/images/jubilaeum.jpg`,
+			textColor: 'white'
 		}
 	]
 	const currentLayout = () => layouts[layoutIndex];
 	let logo: HTMLImageElement;
+
 	
 
     async function startCamera() {
@@ -74,9 +108,9 @@
 		if (!originalPhotoUrl) return;
 
 		if (!logo.complete) {
-		logo.onload = renderFinalPhoto;
-		return;
-	}
+			logo.onload = renderFinalPhoto;
+			return;
+		}
 
 		const canvas = canvasRef;
 		const context = canvas.getContext('2d');
@@ -89,9 +123,9 @@
 
 			context.drawImage(image, 0, 0);
 
-			const logoWidth = canvas.width * 0.3;
+			const logoWidth = canvas.width * 0.1;
 			const logoHeight = logoWidth * (logo.height / logo.width);
-			const padding = canvas.width * 0.02;
+			const padding = canvas.width * 0.03;
 
 			context.imageSmoothingEnabled = true;
 			context.imageSmoothingQuality = 'high';
@@ -105,17 +139,32 @@
 			);
 
 			const barHeight = canvas.height * 0.15;
+			const footer = new Image();
 
-			context.fillStyle = currentLayout().barColor;
-			context.fillRect(0, canvas.height - barHeight, canvas.width, barHeight);
+			footer.onload = () => {
+				context.drawImage(
+					footer,
+					0,
+					canvas.height - barHeight,
+					canvas.width,
+					barHeight
+				);
 
-			context.fillStyle = 'black';
-			context.font = `${canvas.width * 0.04}px Arial`;
-			context.textAlign = 'center';
-			context.textBaseline = 'middle';
-			context.fillText(overlayText, canvas.width / 2, canvas.height - barHeight / 2);
+				context.fillStyle = currentLayout().textColor;
+				context.font = `${canvas.width * 0.04}px Arial`;
+				context.textAlign = 'center';
+				context.textBaseline = 'middle';
 
-			photoUrl = canvas.toDataURL('image/jpeg', 0.95);
+				context.fillText(
+					overlayText,
+					canvas.width / 2,
+					canvas.height - barHeight / 2
+				);
+
+				photoUrl = canvas.toDataURL('image/jpeg', 0.95);
+			};
+
+			footer.src = currentLayout().footer;
 		};
 
 		image.src = originalPhotoUrl;
@@ -189,8 +238,7 @@
 	
     onMount(() => {
 		logo = new Image();
-		logo.src = `${base}/images/LogoGross.png`;
-
+		logo.src = `${base}/images/logo-sk-jugend-symbol-mittel.png`; //hier geändert von LogoGross
 	});
 </script>
 
@@ -218,8 +266,11 @@
 					></video>
 				{/if}
 				<!-- BALKEN -->
-				<div class="absolute bottom-0 left-0 flex h-16 w-full items-center justify-center text-black"
-					style={`background-color: ${currentLayout().barColor}`}>
+				<div class="absolute bottom-0 left-0 flex h-16 w-full items-center justify-center bg-cover bg-center text-black" 
+				style={`
+					background-image: url('${currentLayout().footer}');
+					color: ${currentLayout().textColor};
+				`}>
 					<input
 					type="text"
 					bind:value={overlayText}

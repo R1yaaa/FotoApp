@@ -11,6 +11,9 @@
 	let facingMode = $state('user');
 	let overlayText = $state('');
 	let layoutIndex = $state(0);
+	const TARGET_ASPECT_RATIO = 4 / 3; 
+	const BAR_HEIGHT_RATIO = 0.15; 
+
 	const layouts = [
 		{
 			name: 'layout1', 
@@ -73,6 +76,7 @@
 			});
 
 			videoRef.srcObject = stream;
+
 			console.log("Camera started.")
 		} catch (err) {
 			console.error("Could not start camera: ", err);
@@ -93,11 +97,35 @@
 		const canvas = canvasRef;
 		const video = videoRef;
 		const context = canvas.getContext('2d');
+		const videoRatio = video.videoWidth / video.videoHeight;
 
-		canvas.width = video.videoWidth;
-		canvas.height = video.videoHeight;
+		let sourceX = 0;
+		let sourceY = 0;
+		let sourceWidth = video.videoWidth;
+		let sourceHeight = video.videoHeight;
 
-		context.drawImage(video, 0, 0, canvas.width, canvas.height);
+		if (videoRatio > TARGET_ASPECT_RATIO) {
+			sourceWidth = video.videoHeight * TARGET_ASPECT_RATIO;
+			sourceX = (video.videoWidth - sourceWidth) / 2;
+		} else {
+			sourceHeight = video.videoWidth / TARGET_ASPECT_RATIO;
+			sourceY = (video.videoHeight - sourceHeight) / 2;
+		}
+
+		canvas.width = sourceWidth;
+		canvas.height = sourceHeight;
+
+		context.drawImage(
+			video,
+			sourceX,
+			sourceY,
+			sourceWidth,
+			sourceHeight,
+			0,
+			0,
+			sourceWidth,
+			sourceHeight
+		);
 
 		originalPhotoUrl = canvas.toDataURL('image/jpeg', 0.95);
 
@@ -138,16 +166,18 @@
 				logoHeight
 			);
 
-			const barHeight = canvas.height * 0.15;
+			const barHeight = canvas.height * BAR_HEIGHT_RATIO;
 			const footer = new Image();
 
 			footer.onload = () => {
-				context.drawImage(
+				drawImageContain(
+					context,
 					footer,
 					0,
 					canvas.height - barHeight,
 					canvas.width,
-					barHeight
+					barHeight,
+					'#000000'
 				);
 
 				context.fillStyle = currentLayout().textColor;
@@ -235,10 +265,81 @@
 			renderFinalPhoto();
 		}
 	}
+
+	function drawImageCover(
+		context: CanvasRenderingContext2D,
+		image: HTMLImageElement,
+		x: number,
+		y: number,
+		width: number,
+		height: number
+	) {
+		const imageRatio = image.width / image.height;
+		const targetRatio = width / height;
+
+		let sourceX = 0;
+		let sourceY = 0;
+		let sourceWidth = image.width;
+		let sourceHeight = image.height;
+
+		if (imageRatio > targetRatio) {
+			sourceWidth = image.height * targetRatio;
+			sourceX = (image.width - sourceWidth) / 2;
+		} else {
+			sourceHeight = image.width / targetRatio;
+			sourceY = (image.height - sourceHeight) / 2;
+		}
+
+		context.drawImage(
+			image,
+			sourceX,
+			sourceY,
+			sourceWidth,
+			sourceHeight,
+			x,
+			y,
+			width,
+			height
+		);
+	}
+
+	function drawImageContain(
+		context: CanvasRenderingContext2D,
+		image: HTMLImageElement,
+		x: number,
+		y: number,
+		width: number,
+		height: number,
+		bgColor: string = '#000000'
+	) {
+		context.save();
+		context.fillStyle = bgColor;
+		context.fillRect(x, y, width, height);
+
+		const imageRatio = image.width / image.height;
+		const targetRatio = width / height;
+
+		let drawWidth: number;
+		let drawHeight: number;
+
+		if (imageRatio > targetRatio) {
+			drawWidth = width;
+			drawHeight = width / imageRatio;
+		} else {
+			drawHeight = height;
+			drawWidth = height * imageRatio;
+		}
+
+		const drawX = x + (width - drawWidth) / 2;
+		const drawY = y + (height - drawHeight) / 2;
+
+		context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+		context.restore();
+	}
 	
     onMount(() => {
 		logo = new Image();
-		logo.src = `${base}/images/logo-sk-jugend-symbol-mittel.png`; //hier geändert von LogoGross
+		logo.src = `${base}/images/logo-sk-jugend-symbol-mittel.png`; 
 	});
 </script>
 
@@ -246,10 +347,14 @@
 
 <div class="min-h-screen bg-white p-4 print:hidden">
 	<div class="mx-auto w-full max-w-5xl">
-		<div class="overflow-hidden rounded-2xl bg-black shadow-lg">
+		<div class="flex justify-center">
+			<div class="overflow-hidden rounded-2xl bg-black shadow-lg" style="max-width: 100%;">
 
-			<!-- KAMERA -->
-			<div class="relative aspect-video overflow-hidden">
+				<!-- KAMERA -->
+				<div
+					class="relative overflow-hidden"
+					style={`height: min(70vh, 700px); aspect-ratio: ${TARGET_ASPECT_RATIO}; width: auto; max-width: 95vw;`}
+				>
 				{#if photoUrl}
 					<img
 						src={photoUrl}
@@ -265,10 +370,13 @@
 						class="h-full w-full object-cover"
 					></video>
 				{/if}
-				<!-- BALKEN -->
-				<div class="absolute bottom-0 left-0 flex h-16 w-full items-center justify-center bg-cover bg-center text-black" 
+				<!-- FOOTER -->
+				<div class="absolute bottom-0 left-0 flex w-full items-center justify-center bg-center bg-no-repeat text-black" 
 				style={`
+					height: 15%;
 					background-image: url('${currentLayout().footer}');
+					background-size: contain;
+					background-color: black;
 					color: ${currentLayout().textColor};
 				`}>
 					<input
@@ -279,6 +387,7 @@
 					class="w-full bg-transparent text-center text-black outline-none"/>
 				</div>
 			</div>
+		</div>
 		</div>
 
 		<!-- BUTTONS -->
@@ -347,8 +456,8 @@
 
 		.print-only {
 			display: flex;
-			max-width: 100vw;
-			max-height: 100vh;
+			width: 297mm;
+			height: 210mm;
 			align-items: center;
 			justify-content: center;
 			background: white;
@@ -357,11 +466,10 @@
 
 		.print-only img {
 			display: block;
-			width: auto;
-			height: 78vh;
+			width: 100%;
+			height: 100%;
 			object-fit: contain;
 		}
 	}
 
 </style>
-

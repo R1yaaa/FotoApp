@@ -18,47 +18,56 @@
 		{
 			name: 'layout1', 
 			footer: `${base}/images/gelb.jpg`,
-			textColor: 'black'
+			textColor: 'black',
+			allowText: true
 		},
 		{
 			name: 'layout2',
 			footer: `${base}/images/gelb_text1.jpg`,
-			textColor: 'black'
+			textColor: 'black',
+			allowText: false
 		},
 		{
 			name: 'layout3',
 			footer: `${base}/images/gelb_text2.jpg`,
-			textColor: 'black'
+			textColor: 'black',
+			allowText: false
 		},
 		{
 			name: 'layout4',
 			footer: `${base}/images/gruen.jpg`,
-			textColor: 'white'
+			textColor: 'white',
+			allowText: true
 		},
 		{
 			name: 'layout5',
 			footer: `${base}/images/gruen_text1.jpg`,
-			textColor: 'white'
+			textColor: 'white',
+			allowText: false
 		},
 		{
 			name: 'layout6',
 			footer: `${base}/images/gruen_text2.jpg`,
-			textColor: 'white'
+			textColor: 'white',
+			allowText: false
 		},
 		{
 			name: 'layout7',
 			footer: `${base}/images/weltraum1.jpg`,
-			textColor: 'white'
+			textColor: 'white',
+			allowText: false
 		},
 		{
 			name: 'layout8',
 			footer: `${base}/images/weltraum2.jpg`,
-			textColor: 'white'
+			textColor: 'white',
+			allowText: false
 		},
 		{
 			name: 'layout9',
 			footer: `${base}/images/jubilaeum.jpg`,
-			textColor: 'white'
+			textColor: 'white',
+			allowText: false
 		}
 	]
 	const currentLayout = () => layouts[layoutIndex];
@@ -99,6 +108,7 @@
 		const context = canvas.getContext('2d');
 		const videoRatio = video.videoWidth / video.videoHeight;
 
+		// center-crops  the frame to TARGET_ASPECT_RATIO
 		let sourceX = 0;
 		let sourceY = 0;
 		let sourceWidth = video.videoWidth;
@@ -181,16 +191,16 @@
 				);
 
 				context.fillStyle = currentLayout().textColor;
-				context.font = `${canvas.width * 0.04}px Arial`;
+				context.font = `${canvas.width * 0.03}px Arial`;
 				context.textAlign = 'center';
 				context.textBaseline = 'middle';
-
-				context.fillText(
-					overlayText,
-					canvas.width / 2,
-					canvas.height - barHeight / 2
-				);
-
+				if (currentLayout().allowText) {
+					context.fillText(
+						overlayText,
+						canvas.width / 2,
+						canvas.height - barHeight / 2
+					);
+				}
 				photoUrl = canvas.toDataURL('image/jpeg', 0.95);
 			};
 
@@ -265,7 +275,8 @@
 			renderFinalPhoto();
 		}
 	}
-
+	// Cover-fits an image into a target box: crops the image (centered) so it
+	// fills the box completely with no gaps, matching CSS's object-fit: cover.
 	function drawImageCover(
 		context: CanvasRenderingContext2D,
 		image: HTMLImageElement,
@@ -303,6 +314,9 @@
 		);
 	}
 
+	// Contain-fits an image into a target box: scales the whole image down to
+	// fit inside without cropping, centering it and filling any leftover space
+	// with bgColor, matching CSS's object-fit: contain.
 	function drawImageContain(
 		context: CanvasRenderingContext2D,
 		image: HTMLImageElement,
@@ -379,12 +393,14 @@
 					background-color: black;
 					color: ${currentLayout().textColor};
 				`}>
-					<input
-					type="text"
-					bind:value={overlayText}
-					placeholder="Text eingeben"
-					oninput={renderFinalPhoto}
-					class="w-full bg-transparent text-center text-black outline-none"/>
+					{#if currentLayout().allowText}
+						<input
+						type="text"
+						bind:value={overlayText}
+						placeholder="Text eingeben"
+						oninput={renderFinalPhoto}
+						class="w-full bg-transparent text-center text-black outline-none"/>
+					{/if}
 				</div>
 			</div>
 		</div>

@@ -53,19 +53,25 @@
 		},
 		{
 			name: 'layout7',
-			footer: `${base}/images/weltraum1.jpg`,
+			footer: `${base}/images/weltraum1.png`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
 			name: 'layout8',
-			footer: `${base}/images/weltraum2.jpg`,
+			footer: `${base}/images/weltraum2.png`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
 			name: 'layout9',
-			footer: `${base}/images/jubilaeum.jpg`,
+			footer: `${base}/images/jubilaeum.png`,
+			textColor: 'white',
+			allowText: false
+		},
+		{
+			name: 'layout10',
+			footer: `${base}/images/weiss_text.png`,
 			textColor: 'white',
 			allowText: false
 		}
@@ -211,6 +217,11 @@
 	}
 
     function removePhoto(){
+		if (!photoUrl) {
+			console.warn("No photo available to remove.");
+			return;
+		}
+		
         photoUrl = null;
 		originalPhotoUrl = null;
         setTimeout(() => {

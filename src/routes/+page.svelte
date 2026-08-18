@@ -2,6 +2,16 @@
     import { onMount } from 'svelte';
     import { render } from 'svelte/server';
 	import { base } from '$app/paths';
+	import {
+		Play,
+		CameraOff,
+		SwitchCamera,
+		Camera,
+		Trash2,
+		PencilSparkles,
+		Share2,
+		Printer
+	} from '@lucide/svelte';
 
     let videoRef = $state<any>();
     let canvasRef = $state<any>();
@@ -16,61 +26,25 @@
 
 	const layouts = [
 		{
-			name: 'layout1', 
-			footer: `${base}/images/gelb.jpg`,
-			textColor: 'black',
-			allowText: true
-		},
-		{
-			name: 'layout2',
-			footer: `${base}/images/gelb_text1.jpg`,
-			textColor: 'black',
-			allowText: false
-		},
-		{
-			name: 'layout3',
-			footer: `${base}/images/gelb_text2.jpg`,
-			textColor: 'black',
-			allowText: false
-		},
-		{
-			name: 'layout4',
-			footer: `${base}/images/gruen.jpg`,
-			textColor: 'white',
-			allowText: true
-		},
-		{
-			name: 'layout5',
-			footer: `${base}/images/gruen_text1.jpg`,
-			textColor: 'white',
-			allowText: false
-		},
-		{
-			name: 'layout6',
-			footer: `${base}/images/gruen_text2.jpg`,
-			textColor: 'white',
-			allowText: false
-		},
-		{
-			name: 'layout7',
+			name: 'layout1',
 			footer: `${base}/images/weltraum1.png`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
-			name: 'layout8',
+			name: 'layout2',
 			footer: `${base}/images/weltraum2.png`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
-			name: 'layout9',
+			name: 'layout3',
 			footer: `${base}/images/jubilaeum.png`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
-			name: 'layout10',
+			name: 'layout4',
 			footer: `${base}/images/weiss_text.png`,
 			textColor: 'white',
 			allowText: false
@@ -419,36 +393,36 @@
 
 		<!-- BUTTONS -->
 		<div class="mt-3 flex justify-center gap-3 text-sm font-medium">
-			<button class="rounded-2xl bg-green-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={startCamera}>
-				Kamera starten
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={startCamera} aria-label = "Kamera starten" title="Kamera starten">
+				<Play size=28 />
 			</button>
 
-			<button class="rounded-2xl bg-red-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={stopCamera}>
-				Kamera stoppen
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={stopCamera} aria-label = "Kamera stoppen" title="Kamera stoppen">
+				<CameraOff size=28 />
 			</button> 
 
-			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={switchCamera}>
-				Kamera wechseln
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={switchCamera} aria-label = "Kamera wechseln" title="Kamera wechseln">
+				<SwitchCamera size=28/>
 			</button>
 
-			<button class="rounded-2xl bg-lime-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={takePhoto}>
-				Foto aufnehmen
+			<button class="rounded-2xl bg-lime-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={takePhoto} aria-label = "Foto aufnehmen" title="Foto aufnehmen">
+				<Camera size=28 />
 			</button>
 
-			<button class="rounded-2xl bg-red-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={removePhoto}>
-				Foto entfernen
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={removePhoto} aria-label = "Foto entfernen" title="Foto entfernen">
+				<Trash2 size=28 />
 			</button>
 
-			<button class="rounded-2xl bg-indigo-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={changeLayout}>
-				Layout wechseln
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={changeLayout} aria-label = "Layout wechseln" title="Layout wechseln">
+				<PencilSparkles size=28/>
 			</button>
 
-			<button class="rounded-2xl bg-yellow-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={sharePhoto}>
-				Foto teilen
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={sharePhoto} aria-label = "Foto teilen" title="Foto teilen">
+				<Share2 size=28/>
 			</button>
 
-			<button class="rounded-2xl bg-blue-400 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={printPhoto}>
-				Foto Drucken
+			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={printPhoto} aria-label = "Foto drucken" title="Foto drucken">
+				<Printer size=28/>
 			</button>
 		</div>
 	</div>

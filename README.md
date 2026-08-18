@@ -6,11 +6,20 @@ The app provides a live camera preview, allows users to capture photos, switch c
 
 ---
 
+## Live Demo
+
+The current version is available on GitHub Pages:
+
+https://r1yaaa.github.io/FotoApp/
+
+---
+
 ## Technologies
 
 - Svelte 5
 - TypeScript
 - TailwindCSS
+- Lucid Svelte  
 - Browser MediaDevices API
 - HTML Canvas API
 

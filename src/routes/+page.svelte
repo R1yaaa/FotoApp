@@ -344,16 +344,15 @@
 
 
 
-<div class="min-h-screen bg-white p-4 print:hidden">
-	<div class="mx-auto w-full max-w-5xl">
-		<div class="flex justify-center">
-			<div class="overflow-hidden rounded-2xl bg-black shadow-lg" style="max-width: 100%;">
+<div class="h-screen w-screen overflow-hidden bg-white p-2 print:hidden">
+	<div class="flex h-full w-full flex-col items-center">
 
-				<!-- KAMERA -->
-				<div
-					class="relative overflow-hidden"
-					style={`height: min(70vh, 700px); aspect-ratio: ${TARGET_ASPECT_RATIO}; width: auto; max-width: 95vw;`}
-				>
+		<!-- KAMERA-BEREICH -->
+		<div class="flex min-h-0 w-full flex-1 items-center justify-center">
+			<div
+				class="relative max-h-full max-w-full overflow-hidden rounded-2xl bg-black shadow-lg"
+				style={`aspect-ratio: ${TARGET_ASPECT_RATIO}; height: 100%;`}
+			>
 				{#if photoUrl}
 					<img
 						src={photoUrl}
@@ -389,10 +388,9 @@
 				</div>
 			</div>
 		</div>
-		</div>
 
 		<!-- BUTTONS -->
-		<div class="mt-3 flex justify-center gap-3 text-sm font-medium">
+		<div class="mt-2 flex shrink-0 flex-wrap justify-center gap-2">
 			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={startCamera} aria-label = "Kamera starten" title="Kamera starten">
 				<Play size=28 />
 			</button>

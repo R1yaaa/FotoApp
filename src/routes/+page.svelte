@@ -455,7 +455,7 @@
 	.print-only {
 		display: flex;
 		width: auto;
-		height: 180mm;
+		height: 160mm;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;

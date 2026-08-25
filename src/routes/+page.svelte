@@ -437,38 +437,34 @@
 
 <style>
 	.print-only {
-		display: none;
-	}
+	display: none;
+}
 
-	@page {
+@page {
 	size: A4 landscape;
 	margin: 0;
+}
+
+@media print {
+	html,
+	body {
+		margin: 0;
+		padding: 0;
 	}
 
-	@media print {
-		html,
-		body {
-			margin: 0;
-			padding: 0;
-			overflow: hidden;
-		}
-
-		.print-only {
-			display: flex;
-			width: 297mm;
-			height: 210mm;
-			align-items: center;
-			justify-content: center;
-			background: white;
-			overflow: hidden;
-		}
-
-		.print-only img {
-			display: block;
-			width: 100%;
-			height: 100%;
-			object-fit: contain;
-		}
+	.print-only {
+		display: flex;
+		width: 297mm;
+		height: 210mm;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
 	}
 
+	.print-only img {
+		display: block;
+		width: 285mm;
+		height: auto;
+	}
+}
 </style>

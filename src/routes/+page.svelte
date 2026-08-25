@@ -21,7 +21,7 @@
 	let facingMode = $state('user');
 	let overlayText = $state('');
 	let layoutIndex = $state(0);
-	const TARGET_ASPECT_RATIO = 4 / 3; 
+	const TARGET_ASPECT_RATIO = 3 / 2; 
 	const BAR_HEIGHT_RATIO = 0.15; 
 
 	const layouts = [

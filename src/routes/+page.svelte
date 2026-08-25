@@ -344,7 +344,7 @@
 
 
 
-<div class="h-screen w-screen overflow-hidden bg-white p-2 print:hidden">
+<div class="h-dvh w-full overflow-hidden bg-white p-2 print:hidden">
 	<div class="flex h-full w-full flex-col items-center">
 
 		<!-- KAMERA-BEREICH -->
@@ -390,7 +390,7 @@
 		</div>
 
 		<!-- BUTTONS -->
-		<div class="mt-2 flex shrink-0 flex-wrap justify-center gap-2">
+		<div class="mt-1 flex shrink-0 flex-wrap justify-center gap-2">
 			<button class="rounded-2xl bg-gray-300 px-4 py-2 transition-all duration-200 hover:scale-105 cursor-pointer" onclick={startCamera} aria-label = "Kamera starten" title="Kamera starten">
 				<Play size=28 />
 			</button>

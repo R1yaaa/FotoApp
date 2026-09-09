@@ -27,25 +27,31 @@
 	const layouts = [
 		{
 			name: 'layout1',
-			footer: `${base}/images/weltraum1.png`,
+			footer: `${base}/images/weltraum1.svg`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
 			name: 'layout2',
-			footer: `${base}/images/weltraum2.png`,
+			footer: `${base}/images/weltraum2.svg`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
 			name: 'layout3',
-			footer: `${base}/images/jubilaeum.png`,
+			footer: `${base}/images/jubilaeum.svg`,
 			textColor: 'white',
 			allowText: false
 		},
 		{
 			name: 'layout4',
-			footer: `${base}/images/weiss_text.png`,
+			footer: `${base}/images/weiss_text.svg`,
+			textColor: 'white',
+			allowText: false
+		},
+		{
+			name: 'layout4',
+			footer: `${base}/images/elemente.svg`,
 			textColor: 'white',
 			allowText: false
 		}

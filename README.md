@@ -2,7 +2,7 @@
 
 A simple photo application built with Svelte 5 and TailwindCSS.
 
-The app provides a live camera preview, allows users to capture photos, switch cameras, remove photos, print or save photo, and automatically adds a branding / logo overlay to the final photo. Further, the app also has a responsive layout for desktop and tablets.
+The app provides a live camera preview, allows users to capture photos, switch cameras, remove photos, print or save photo, and automatically adds a branding / logo overlay to the final photo.
 
 ---
 
@@ -38,7 +38,7 @@ https://r1yaaa.github.io/FotoApp/
 Clone the repository:
 
 ```bash
-git clone https://github.com/stjume/FotoApp.git
+git clone https://github.com/r1yaaa/FotoApp.git
 ```
 
 Install the packages
